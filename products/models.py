@@ -9,7 +9,6 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = 'Categories'
 
-
 class Tag(models.Model):
     name = models.CharField(max_length=100)
 
