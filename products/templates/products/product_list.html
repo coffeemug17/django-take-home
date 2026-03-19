@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Search</title>
+</head>
+<body>
+
+<h1>Products</h1>
+
+<form method="GET">
+    <input
+        type="text"
+        name="q"
+        value="{{ query }}"
+        placeholder="Search by description"
+    />
+
+    <select name="category">
+        <option value="">All Categories</option>
+        {% for category in categories %}
+            <option
+                value="{{ category.id }}"
+                {% if selected_category == category.id|stringformat:"s" %}selected{% endif %}
+            >
+                {{ category.name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <div>
+        {% for tag in tags %}
+            <label>
+                <input
+                    type="checkbox"
+                    name="tags"
+                    value="{{ tag.id }}"
+                    {% if tag.id|stringformat:"s" in selected_tags %}checked{% endif %}
+                />
+                {{ tag.name }}
+            </label>
+        {% endfor %}
+    </div>
+
+    <button type="submit">Search</button>
+    <a href="/">Clear</a>
+</form>
+
+<p>{{ products.count }} product(s) found</p>
+
+{% for product in products %}
+    <div>
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.description }}</p>
+        <p><strong>Category:</strong> {{ product.category }}</p>
+        <p><strong>Tags:</strong>
+            {% for tag in product.tags.all %}
+                {{ tag.name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+    </div>
+    <hr>
+{% empty %}
+    <p>No products found.</p>
+{% endfor %}
+
+</body>
+</html>
