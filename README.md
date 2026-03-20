@@ -71,7 +71,7 @@ uv run python manage.py test
 # or: python manage.py test
 ```
 
-6 tests covering the main scenarios — default display, description search, category filter, tag filter, combined filters, and no results. Each test builds its own isolated data so they don't interfere with each other or depend on the database being pre-populated.
+6 tests covering the main scenarios: default display, description search, category filter, tag filter, combined filters, and no results. Each test builds its own isolated data so they don't interfere with each other or depend on the database being pre-populated.
 
 ---
 
