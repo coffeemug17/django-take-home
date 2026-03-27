@@ -1,3 +1,4 @@
+{% load highlight %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,8 +101,8 @@
                                 onchange="this.form.submit()"
                                 class="sr-only peer"
                             />
-                            <span class="inline-block px-3 py-1 text-xs rounded-full border border-gray-200 text-gray-500 peer-checked:bg-violet-100 peer-checked:border-violet-300 peer-checked:text-violet-800 transition-colors">
-                                {{ tag.name }}
+                            <span class="text-sm text-gray-400 peer-checked:text-violet-600 peer-checked:font-medium transition-colors">
+                                #{{ tag.name }}
                             </span>
                         </label>
                     {% endfor %}
@@ -125,8 +126,8 @@
                     {% for product in products %}
                         <div class="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-3 hover:shadow-md transition-shadow">
                             <div>
-                                <h3 class="text-base font-medium text-gray-900">{{ product.name }}</h3>
-                                <p class="text-sm text-gray-500 mt-1 leading-relaxed line-clamp-3">{{ product.description }}</p>
+                                <h3 class="text-base font-medium text-gray-900">{{ product.name|highlight:query }}</h3>
+                                <p class="text-sm text-gray-500 mt-1 leading-relaxed line-clamp-3">{{ product.description|highlight:query }}</p>
                             </div>
                             <div class="flex flex-col gap-2 mt-auto">
                                 {% if product.category %}
@@ -137,9 +138,7 @@
                                 {% if product.tags.all %}
                                 <div class="flex flex-wrap gap-1">
                                     {% for tag in product.tags.all %}
-                                        <span class="text-xs px-2 py-1 rounded-full bg-violet-50 text-violet-700">
-                                            {{ tag.name }}
-                                        </span>
+                                        <span class="text-xs text-gray-400">#{{ tag.name }}</span>
                                     {% endfor %}
                                 </div>
                                 {% endif %}

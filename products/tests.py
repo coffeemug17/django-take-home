@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from .models import Product, Category, Tag
 
+
 class ProductSearchTests(TestCase):
     def setUp(self):
         self.client = Client()
@@ -22,16 +23,22 @@ class ProductSearchTests(TestCase):
         self.assertContains(response, 'Electronics')
         self.assertContains(response, 'Sale')
     
+    def test_search_by_name(self):
+        response = self.client.get(reverse('product_list'), {'q': 'Wireless'})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Headphones')
+
     def test_search_by_description(self):
-        response = self.client.get(reverse('product_list'), {'q': 'wireless'})
+        response = self.client.get(reverse('product_list'), {'q': 'High quality'})
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Wireless Headphones')
     
     def test_filter_by_category(self):
+        other = Product.objects.create(name='Yoga Mat', description='A mat', category=Category.objects.create(name='Sports'))
         response = self.client.get(reverse('product_list'), {'category': self.category.id})
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Wireless Headphones')
-        self.assertContains(response, 'Electronics')
+        self.assertNotContains(response, 'Yoga Mat')
     
     def test_filter_by_tags(self):
         response = self.client.get(reverse('product_list'), {'tags': [self.tag.id]})
@@ -46,7 +53,7 @@ class ProductSearchTests(TestCase):
             'tags': [self.tag.id]
         })
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Wireless Headphones')
+        self.assertContains(response, 'Headphones')
         self.assertContains(response, 'Electronics')
         self.assertContains(response, 'Sale')
 
