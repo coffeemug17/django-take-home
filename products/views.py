@@ -1,9 +1,10 @@
 from django.shortcuts import render
+from django.db.models import Q
 from .models import Product, Category, Tag
 
 
 def product_list(request):
-    products = Product.objects.all()
+    products = Product.objects.select_related('category').prefetch_related('tags')
     categories = Category.objects.all()
     tags = Tag.objects.all()
 
@@ -12,15 +13,15 @@ def product_list(request):
     selected_tags = request.GET.getlist('tags')
 
     if query:
-        products = products.filter(description__icontains=query)
-    
+        products = products.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
+
     if selected_category:
         products = products.filter(category__id=selected_category)
-    
+
     if selected_tags:
-        for tag_id in selected_tags:
-            products = products.filter(tags__id=tag_id)
-        products = products.distinct()
+        products = products.filter(tags__id__in=selected_tags).distinct()
 
     context = {
         'products': products,
