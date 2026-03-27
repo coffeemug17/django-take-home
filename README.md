@@ -82,9 +82,11 @@ uv run python manage.py test
 
 **Models**: `Product` has a `ForeignKey` to `Category` (one category per product) and a `ManyToManyField` to `Tag` (many tags per product). Used `SET_NULL` on the FK so deleting a category doesn't cascade delete all its products.
 
-**Filtering logic**: filters are chained on the queryset so combining them applies AND logic. When multiple tags are selected, each tag is applied as a separate filter so only products matching all selected tags are returned.
+**Filtering logic**: filters are chained on the queryset so combining them applies AND logic. When multiple tags are selected, results must contain all selected tags, implemented using annotation and count filtering on the queryset.
 
 **Admin**: registered all three models with `list_display`, `search_fields`, and `filter_horizontal` on the tags field. `filter_horizontal` makes selecting multiple tags for a product much less painful than the default widget.
+
+**Updates after initial feedback**: refactored tag filtering to use `annotate` and `Count` for proper AND logic, fixed N+1 queries with `select_related` and `prefetch_related`, added search highlighting via a custom template filter, added pagination, and added a seed command for database population.
 
 ---
 
