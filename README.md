@@ -51,7 +51,7 @@ uv run python manage.py seed_db
 # or: python manage.py seed_db
 ```
 
-Alternatively, add data manually via `http://localhost:8000/admin` — categories and tags must be created before products.
+Alternatively, add data manually via `http://localhost:8000/admin`, categories and tags must be created before products.
 
 ---
 
