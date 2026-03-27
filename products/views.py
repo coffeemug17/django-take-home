@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.db.models import Q
+from django.core.paginator import Paginator
 from .models import Product, Category, Tag
 
 
@@ -20,11 +21,15 @@ def product_list(request):
     if selected_category:
         products = products.filter(category__id=selected_category)
 
-    if selected_tags:
-        products = products.filter(tags__id__in=selected_tags).distinct()
+    for tag_id in selected_tags:
+        products = products.filter(tags__id=tag_id)
+
+    paginator = Paginator(products, 10)
+    page = paginator.get_page(request.GET.get('page'))
 
     context = {
-        'products': products,
+        'products': page,
+        'paginator': paginator,
         'categories': categories,
         'tags': tags,
         'query': query,
