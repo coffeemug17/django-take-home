@@ -28,7 +28,7 @@ def product_list(request):
             .filter(matched_tags=len(selected_tags))
         )
 
-    paginator = Paginator(products, 10)
+    paginator = Paginator(products.order_by('name'), 10)
     page = paginator.get_page(request.GET.get('page'))
 
     context = {

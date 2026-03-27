@@ -54,3 +54,20 @@ class ProductSearchTests(TestCase):
         response = self.client.get(reverse('product_list'), {'q': 'nonexistent'})
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '0 products found')
+
+    def test_multi_tag_and_logic(self):
+        tag2 = Tag.objects.create(name='Premium')
+        self.product.tags.add(tag2)
+
+        other_product = Product.objects.create(
+            name='Basic Product',
+            description='A basic product',
+            category=self.category
+        )
+        other_product.tags.add(self.tag)  # only has Sale, not Premium
+
+        response = self.client.get(reverse('product_list'), {
+            'tags': [self.tag.id, tag2.id]
+        })
+        self.assertContains(response, 'Wireless Headphones')  # has both tags
+        self.assertNotContains(response, 'Basic Product')
