@@ -53,4 +53,4 @@ class ProductSearchTests(TestCase):
     def test_no_results(self):
         response = self.client.get(reverse('product_list'), {'q': 'nonexistent'})
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, '0 product(s) found')
+        self.assertContains(response, '0 products found')

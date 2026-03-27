@@ -44,11 +44,14 @@ python manage.py runserver
 
 The database isn't included in the repo, so you'll need to populate it before the app is useful.
 
-Go to `http://localhost:8000/admin` and add data in this order, order matters since products depend on categories and tags existing first:
+Run the seed command to load sample data (5 categories, 10 tags, 20 products):
 
-1. **Categories**: at least 5
-2. **Tags**: at least 10
-3. **Products**: at least 20, each with a name, description, a category, and some tags
+```bash
+uv run python manage.py seed_db
+# or: python manage.py seed_db
+```
+
+Alternatively, add data manually via `http://localhost:8000/admin` — categories and tags must be created before products.
 
 ---
 
@@ -56,7 +59,7 @@ Go to `http://localhost:8000/admin` and add data in this order, order matters si
 
 Visit `http://localhost:8000`.
 
-- Type in the search box to filter products by description
+- Type in the search box to filter products by name or description
 - Select a category from the dropdown
 - Check one or more tags
 - All three filters work together, results must match every applied condition
@@ -79,7 +82,7 @@ uv run python manage.py test
 
 **Models**: `Product` has a `ForeignKey` to `Category` (one category per product) and a `ManyToManyField` to `Tag` (many tags per product). Used `SET_NULL` on the FK so deleting a category doesn't cascade delete all its products.
 
-**Filtering logic**: filters are chained on the queryset so combining them applies AND logic. `.distinct()` is used when filtering by tags to avoid duplicate results from the ManyToMany join.
+**Filtering logic**: filters are chained on the queryset so combining them applies AND logic. When multiple tags are selected, each tag is applied as a separate filter so only products matching all selected tags are returned.
 
 **Admin**: registered all three models with `list_display`, `search_fields`, and `filter_horizontal` on the tags field. `filter_horizontal` makes selecting multiple tags for a product much less painful than the default widget.
 
