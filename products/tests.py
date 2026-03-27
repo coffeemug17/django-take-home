@@ -34,7 +34,7 @@ class ProductSearchTests(TestCase):
         self.assertContains(response, 'Wireless Headphones')
     
     def test_filter_by_category(self):
-        other = Product.objects.create(name='Yoga Mat', description='A mat', category=Category.objects.create(name='Sports'))
+        Product.objects.create(name='Yoga Mat', description='A mat', category=Category.objects.create(name='Sports'))
         response = self.client.get(reverse('product_list'), {'category': self.category.id})
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Wireless Headphones')

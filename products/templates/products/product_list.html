@@ -135,13 +135,11 @@
                                     {{ product.category }}
                                 </span>
                                 {% endif %}
-                                {% if product.tags.all %}
                                 <div class="flex flex-wrap gap-1">
                                     {% for tag in product.tags.all %}
                                         <span class="text-xs text-gray-400">#{{ tag.name }}</span>
                                     {% endfor %}
                                 </div>
-                                {% endif %}
                             </div>
                         </div>
                     {% endfor %}
